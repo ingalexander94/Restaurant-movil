@@ -4,6 +4,7 @@ import {
   SELECT_SAUCER,
   DELETE_SAUCER,
   SAVE_ID_REQUEST,
+  RESET_ORDER,
 } from '../../types/types';
 
 const OrderReducer = (state, actions) => {
@@ -38,6 +39,15 @@ const OrderReducer = (state, actions) => {
         orders: [],
         totalPay: 0,
         idRequest: actions.payload,
+      };
+
+    case RESET_ORDER:
+      return {
+        ...state,
+        orders: [],
+        selectedSaucer: null,
+        totalPay: 0,
+        idRequest: '',
       };
 
     default:

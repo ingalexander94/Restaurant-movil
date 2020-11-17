@@ -5,6 +5,7 @@ import {
   CALCULATE_TOTAL,
   DELETE_SAUCER,
   SAVE_ID_REQUEST,
+  RESET_ORDER,
 } from '../../types/types';
 import OrderContext from './orderContext';
 import OrderReducer from './orderReducer';
@@ -51,6 +52,12 @@ const OrderState = (props) => {
       payload: id,
     });
 
+  const resetOrder = () => {
+    dispatch({
+      type: RESET_ORDER,
+    });
+  };
+
   return (
     <OrderContext.Provider
       value={{
@@ -63,6 +70,7 @@ const OrderState = (props) => {
         calculateTotal,
         deleteSaucer,
         saveIdRequest,
+        resetOrder,
       }}>
       {props.children}
     </OrderContext.Provider>

@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, Fragment} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useContext, Fragment, useEffect} from 'react';
+import {StyleSheet, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
   Container,
@@ -8,22 +8,29 @@ import {
   Separator,
   List,
   ListItem,
-  Thumbnail,
   Body,
+  Right,
+  Left,
 } from 'native-base';
 import FirebaseContext from '../context/firebase/firebaseContext';
 import OrderContext from '../context/order/orderContext';
 import globalStyles from '../styles/global';
 
 export const Menu = () => {
+  // Hooks
   const {menu, listenProducts} = useContext(FirebaseContext);
   const {selectSaucer} = useContext(OrderContext);
   const navigate = useNavigation();
 
   useEffect(() => {
-    listenProducts();
+    async function load() {
+      await listenProducts();
+    }
+
+    load();
   }, []);
 
+  // Funciones
   const showHeading = (category, i) => {
     let previousCagetory = i > 0 ? menu[i - 1].category : 0;
     if (previousCagetory !== category) {
@@ -52,26 +59,22 @@ export const Menu = () => {
               return (
                 <Fragment key={id}>
                   {showHeading(category, i)}
-                  <ListItem onPress={() => select(saucer)}>
-                    <Thumbnail large square source={{uri: image}} />
+                  <ListItem avatar onPress={() => select(saucer)}>
+                    <Left>
+                      <Image
+                        style={globalStyles.imageProduct}
+                        source={{uri: image}}
+                      />
+                    </Left>
                     <Body>
-                      <Text
-                        style={[
-                          globalStyles.uppercase,
-                          {fontWeight: 'bold', color: '#17a2b8'},
-                        ]}>
-                        {name}
-                      </Text>
-                      <Text
-                        note
-                        numberOfLines={2}
-                        style={globalStyles.textWhite}>
+                      <Text style={globalStyles.uppercase}>{name}</Text>
+                      <Text note numberOfLines={1}>
                         {description}
                       </Text>
-                      <Text style={globalStyles.textWhite}>
-                        Precio: ${price}
-                      </Text>
                     </Body>
+                    <Right>
+                      <Text note>${price}</Text>
+                    </Right>
                   </ListItem>
                 </Fragment>
               );
@@ -83,14 +86,26 @@ export const Menu = () => {
   );
 };
 
+// Estilos del componente
 const styles = StyleSheet.create({
   separator: {
-    backgroundColor: '#17a2b8',
+    backgroundColor: '#EEEEEE',
+    marginTop: 10,
   },
   separatorText: {
-    textAlign: 'center',
-    color: 'white',
-    fontWeight: 'bold',
+    color: '#616B76',
     fontSize: 15,
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+  },
+  card: {
+    backgroundColor: 'white',
+    padding: 10,
+    marginLeft: 10,
+    borderRadius: 20,
+  },
+  cardtitle: {
+    fontWeight: 'bold',
+    color: 'black',
   },
 });
